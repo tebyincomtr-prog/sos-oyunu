@@ -256,17 +256,12 @@ io.on('connection', (socket) => {
         });
       }
       
-      const game = activeGames.get(roomId);
+      const game = games[gameIndex];
       
-      if (game.status !== 'waiting') {
-        socket.emit('error', { message: 'Oda dolu' });
-        return;
-      }
-      
-      if (game.players.length >= 2) {
-        socket.emit('error', { message: 'Oda dolu' });
-        return;
-      }
+      if (game.status !== 'waiting' || game.players.length >= 2) {
+    socket.emit('error', { message: 'Oda dolu' });
+    return;
+  }
       
       // Add player to game
       game.players.push({ userId, name: userName, socketId: socket.id, score: 0 });
